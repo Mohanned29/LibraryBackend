@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Manage Books</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,79 +14,69 @@
             height: 100vh;
             margin: 0;
         }
-        .form-container {
+        .container {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
             width: 100%;
             max-width: 400px;
         }
-        .form-container h2 {
+        .container h1 {
             margin-bottom: 20px;
-            text-align: center;
+            font-size: 2.5em;
+            font-weight: 300;
         }
-        .form-container form {
-            display: flex;
-            flex-direction: column;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .form-container form div {
-            margin-bottom: 10px;
-        }
-        .form-container form input[type="text"],
-        .form-container form input[type="password"] {
+        .form-group input, .form-group button {
+            width: 100%;
             padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
             box-sizing: border-box;
         }
-        .form-container form input[type="submit"] {
-            padding: 10px;
+        .form-group button {
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .form-container form input[type="submit"]:hover {
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .form-group .delete-btn {
             background-color: #007bff;
         }
+        .form-group .delete-btn:hover {
+            background-color: #0056b3;
+        }
         .flashes {
-            margin-top: 20px;
-            list-style: none;
+            list-style-type: none;
             padding: 0;
         }
         .flashes li {
+            margin: 10px 0;
             padding: 10px;
             border-radius: 5px;
-            margin-bottom: 10px;
+            color: white;
         }
         .flashes .success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #28a745;
         }
         .flashes .danger {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: #dc3545;
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h2>Add a New Book</h2>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div>
-                {{ form.nameBook.label }}<br>
-                {{ form.nameBook(size=32) }}<br>
-                {% for error in form.nameBook.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </div>
-            <div>
-                {{ form.submit() }}
-            </div>
-        </form>
+    <div class="container">
+        <h1>Manage Books</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="flashes">
@@ -96,6 +86,17 @@
                 </ul>
             {% endif %}
         {% endwith %}
+        <form method="POST" action="{{ url_for('manage_books') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.nameBook.label }}
+                {{ form.nameBook(class='form-control') }}
+            </div>
+            <div class="form-group">
+                {{ form.add_submit(class='btn btn-primary') }}
+                {{ form.delete_submit(class='btn btn-danger delete-btn') }}
+            </div>
+        </form>
     </div>
 </body>
 </html>

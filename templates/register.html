@@ -27,7 +27,8 @@
             text-align: center;
         }
         .register-container input[type="text"],
-        .register-container input[type="password"] {
+        .register-container input[type="password"],
+        .register-container input[type="date"] {
             width: calc(100% - 22px);
             padding: 10px;
             margin: 10px 0;
@@ -46,7 +47,7 @@
             box-sizing: border-box;
         }
         .register-container input[type="submit"]:hover {
-            background-color: #0d9ae0;
+            background-color: #0b8acb;
         }
         .register-container .login-link {
             text-align: center;
@@ -59,12 +60,28 @@
         .register-container .login-link a:hover {
             text-decoration: underline;
         }
+        .register-container .flashes {
+            list-style-type: none;
+            padding: 0;
+        }
+        .register-container .flashes li {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .register-container .flashes .success {
+            background-color: #28a745;
+        }
+        .register-container .flashes .danger {
+            background-color: #dc3545;
+        }
     </style>
 </head>
 <body>
     <div class="register-container">
         <h2>Register</h2>
-        <form method="POST">
+        <form method="POST" action="{{ url_for('register') }}">
             {{ form.hidden_tag() }}
             <div>
                 {{ form.username.label }}<br>
@@ -77,6 +94,20 @@
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}<br>
                 {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form.name.label }}<br>
+                {{ form.name(size=32) }}<br>
+                {% for error in form.name.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form.birthdate.label }}<br>
+                {{ form.birthdate(size=32) }}<br>
+                {% for error in form.birthdate.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>

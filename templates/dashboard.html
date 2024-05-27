@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Dashboard</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             display: flex;
             justify-content: center;
@@ -23,27 +23,55 @@
             width: 100%;
             max-width: 400px;
         }
-        .container h2 {
+        .container h1 {
             margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: 300;
         }
-        .container a {
+        .info {
+            margin-bottom: 15px;
+        }
+        .info strong {
+            display: block;
+            font-weight: bold;
+            color: #333;
+        }
+        .info span {
+            display: block;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .btn {
             display: inline-block;
+            margin: 10px;
             padding: 10px 20px;
             text-decoration: none;
             color: white;
             background-color: #007bff;
             border-radius: 5px;
-            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
-        .container a:hover {
+        .btn:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, Admin!</h2>
-        <a href="{{ url_for('manage_books') }}">Manage Books</a>
+        <h1>Dashboard</h1>
+        <div class="info">
+            <strong>Name:</strong>
+            <span>{{ name }}</span>
+        </div>
+        <div class="info">
+            <strong>Date of Birth:</strong>
+            <span>{{ birthdate }}</span>
+        </div>
+        <div class="info">
+            <strong>Role:</strong>
+            <span>{{ role }}</span>
+        </div>
+        <a href="{{ url_for('home') }}" class="btn">Home</a>
     </div>
 </body>
 </html>
