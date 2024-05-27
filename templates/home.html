@@ -6,40 +6,103 @@
     <title>Home</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
+            color: #343a40;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header nav a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+        }
+        header nav a:hover {
+            text-decoration: underline;
         }
         .container {
             text-align: center;
+            padding: 20px;
         }
-        .container h1 {
+        .features {
+            margin: 40px 0;
+        }
+        .features h2 {
             margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 300;
         }
-        .container a {
+        .features p {
+            margin: 10px 0;
+        }
+        .btn {
             display: inline-block;
             margin: 10px;
             padding: 10px 20px;
             text-decoration: none;
             color: white;
-            background-color: #4CAF50;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+        }
+        .flashes li {
+            margin: 10px 0;
+            padding: 10px;
             border-radius: 5px;
         }
-        .container a:hover {
-            background-color: #45a049;
+        .flashes .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flashes .danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        footer {
+            background-color: #f1f1f1;
+            color: #6c757d;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        </nav>
+    </header>
+    
     <div class="container">
         <h1>Welcome to the Home Page</h1>
-        <a href="{{ url_for('login') }}">Login</a>
-        <a href="{{ url_for('register') }}">Register</a>
+        <a class="btn" href="{{ url_for('login') }}">Login</a>
+        <a class="btn" href="{{ url_for('register') }}">Register</a>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="flashes">
@@ -49,6 +112,19 @@
                 </ul>
             {% endif %}
         {% endwith %}
+        
+        <div class="features">
+            <h2>Our Features</h2>
+            <p>Extensive collection of books across various genres</p>
+            <p>User-friendly interface for easy book searches</p>
+            <p>Personalized recommendations based on your reading history</p>
+            <p>Regular updates with new arrivals and popular reads</p>
+        </div>
     </div>
+
+    <footer>
+        <p>&copy; 2024 Book Library. All rights reserved.</p>
+        <p><a href="#">Contact Us</a> | <a href="#">About Us</a></p>
+    </footer>
 </body>
 </html>

@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+from typing import Any, Mapping
 from flask import Flask, render_template, url_for, redirect, flash
 from flask_pymongo import PyMongo
 from flask_wtf import FlaskForm
@@ -32,9 +34,13 @@ class LoginForm(FlaskForm):
 
 
 class BookForm(FlaskForm):
-    id = 0
     nameBook = StringField(validators=[InputRequired(), Length(min=0 , max=20)], render_kw={"placeholder": "Book Name"})
     submit = SubmitField('Add Book')
+
+    def validate_nameBook(self, nameBook):
+        existingBook = mongo.db.books.find_one({"nameBook": nameBook.data})
+        if existingBook:
+            raise ValidationError("This book already exists in your library!!")
 
 
 @app.route("/")
@@ -95,6 +101,17 @@ def BookDash():
         flash("The book has been added to the database!", 'success')
         return redirect(url_for('BookDash'))
     return render_template("Addbook.html", form=form)
+
+
+@app.route("/deleteBooks" , methods=['GET','POST'])
+def DeleteBook():
+    form = BookForm()
+    if form.validate_on_submit():
+        nameBook = form.nameBook.data
+        mongo.db.books.delete_one({"nameBook":nameBook})
+        flash("The book has been deleted", "success")
+        return redirect(url_for("DeleteBook"))
+    return render_template("DeleteBook.html" , form = form)
 
 
 if __name__ == '__main__':
