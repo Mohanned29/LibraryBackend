@@ -3,75 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>User Dashboard</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #007bff;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 0;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+            border-radius: 5px;
+            padding-left: 10px;
         }
         .container {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .profile-info, .recent-activities {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-        .container h1 {
             margin-bottom: 20px;
-            font-size: 2.5em;
-            font-weight: 300;
         }
-        .info {
-            margin-bottom: 15px;
+        .profile-info h2, .recent-activities h2 {
+            margin-top: 0;
         }
-        .info strong {
-            display: block;
-            font-weight: bold;
-            color: #333;
+        .recent-activities ul {
+            list-style: none;
+            padding: 0;
         }
-        .info span {
-            display: block;
-            font-size: 1.2em;
-            color: #555;
+        .recent-activities li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
         }
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #0056b3;
+        .recent-activities li:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Notifications</a>
+        <a href="#">Messages</a>
+        <a href="#">Logout</a>
+    </div>
     <div class="container">
-        <h1>Dashboard</h1>
-        <div class="info">
-            <strong>Name:</strong>
-            <span>{{ name }}</span>
+        <header>
+            <h1>Welcome, {{ name }}!</h1>
+        </header>
+        <div class="profile-info">
+            <h2>Profile Information</h2>
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Birthdate:</strong> {{ birthdate }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <!-- Add more profile fields as needed -->
         </div>
-        <div class="info">
-            <strong>Date of Birth:</strong>
-            <span>{{ birthdate }}</span>
+        <div class="recent-activities">
+            <h2>Recent Activities</h2>
+            <ul>
+                <li>Activity 1</li>
+                <li>Activity 2</li>
+                <li>Activity 3</li>
+                <!-- Add more activities as needed -->
+            </ul>
         </div>
-        <div class="info">
-            <strong>Role:</strong>
-            <span>{{ role }}</span>
-        </div>
-        <a href="{{ url_for('home') }}" class="btn">Home</a>
     </div>
 </body>
 </html>
