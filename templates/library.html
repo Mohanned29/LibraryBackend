@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            display: flex;
+        }
+        .sidebar {
+            background-color: #007bff;
+            color: white;
+            width: 250px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .sidebar-header {
+            margin-bottom: 20px;
+        }
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            text-align: center;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: #0056b3;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        header input {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .recommended {
+            margin-bottom: 40px;
+        }
+        .recommended h3 {
+            margin-bottom: 20px;
+        }
+        .books {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .book {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            text-align: center;
+        }
+        .book img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .book-info h4 {
+            margin: 10px 0 5px;
+            font-size: 16px;
+        }
+        .book-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #777;
+        }
+        .categories {
+            margin-bottom: 40px;
+        }
+        .categories h3 {
+            margin-bottom: 20px;
+        }
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .category-buttons .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .category-buttons .btn:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            header input {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>BookBase</h2>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="active">Discover</a>
+            <a href="#">Category</a>
+            <a href="#">My Library</a>
+            <a href="#">Download</a>
+            <a href="#">Audio Books</a>
+            <a href="#">Favourite</a>
+            <a href="#">Settings</a>
+            <a href="#">Support</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <header>
+            <input type="text" placeholder="Search your favourite books">
+        </header>
+        <div class="recommended">
+            <h3>Recommended</h3>
+            <div class="books">
+                {% for book in books %}
+                <div class="book">
+                    <img src="{{ url_for('static', filename='assets/images/' + book['cover_image']) }}" alt="{{ book.nameBook }}">
+                    <div class="book-info">
+                        <h4>{{ book.nameBook }}</h4>
+                        <p>{{ book.category }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="categories">
+            <h3>Categories</h3>
+            <div class="category-buttons">
+                <button class="btn">All</button>
+                <button class="btn">Sci-Fi</button>
+                <button class="btn">Fantasy</button>
+                <button class="btn">Adventure</button>
+                <button class="btn">Mystery</button>
+                <button class="btn">Romance</button>
+                <button class="btn">Horror</button>
+                <button class="btn">Biography</button>
+                <button class="btn">History</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.category-buttons .btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.category-buttons .btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const category = button.textContent.toLowerCase();
+                document.querySelectorAll('.book').forEach(book => {
+                    if (category === 'all' || book.querySelector('p').textContent.toLowerCase() === category) {
+                        book.style.display = 'block';
+                    } else {
+                        book.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

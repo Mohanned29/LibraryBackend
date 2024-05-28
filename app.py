@@ -31,7 +31,7 @@ def login():
                 return redirect(url_for('AdminDash'))
             else:
                 flash('Logged in successfully', 'success')
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('library'))
         else:
             flash('Login unsuccessful, please check username and password', 'danger')
     return render_template("login.html", form=form)
