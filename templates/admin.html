@@ -20,30 +20,131 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 100%;
-            max-width: 400px;
+            width: 90%;
+            max-width: 1000px;
         }
         .container h2 {
             margin-bottom: 20px;
         }
-        .container a {
-            display: inline-block;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border-radius: 5px;
-            margin-top: 10px;
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
         }
-        .container a:hover {
+        .form-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 45%;
+        }
+        .form-section h3 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input, .form-group button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .form-group button:hover {
             background-color: #0056b3;
+        }
+        .form-group .delete-btn {
+            background-color: #dc3545;
+        }
+        .form-group .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+        }
+        .flashes li {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .flashes .success {
+            background-color: #28a745;
+        }
+        .flashes .danger {
+            background-color: #dc3545;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Welcome, Admin!</h2>
-        <a href="{{ url_for('manage_books') }}">Manage Books</a>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div class="form-container">
+            <div class="form-section">
+                <h3>Manage Users</h3>
+                <form method="POST">
+                    {{ user_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ user_form.username.label }}
+                        {{ user_form.username(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ user_form.password.label }}
+                        {{ user_form.password(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ user_form.name.label }}
+                        {{ user_form.name(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ user_form.birthdate.label }}
+                        {{ user_form.birthdate(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ user_form.role.label }}
+                        {{ user_form.role(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ user_form.add_submit(class='btn btn-primary') }}
+                        {{ user_form.delete_submit(class='btn btn-danger delete-btn') }}
+                    </div>
+                </form>
+            </div>
+            <div class="form-section">
+                <h3>Manage Books</h3>
+                <form method="POST">
+                    {{ book_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ book_form.nameBook.label }}
+                        {{ book_form.nameBook(class='form-control') }}
+                    </div>
+                    <div class="form-group">
+                        {{ book_form.add_submit(class='btn btn-primary') }}
+                        {{ book_form.delete_submit(class='btn btn-danger delete-btn') }}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 </html>

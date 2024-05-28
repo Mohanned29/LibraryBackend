@@ -1,5 +1,3 @@
-from collections.abc import Sequence
-from typing import Any, Mapping
 from flask import Flask, render_template, url_for, redirect, flash, session
 from flask_pymongo import PyMongo
 from flask_wtf import FlaskForm
@@ -45,6 +43,15 @@ class BookForm(FlaskForm):
     #add and delete the book (submit fields)
     add_submit = SubmitField('Add Book')
     delete_submit = SubmitField('Delete Book')
+
+class ManagerUsers(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(min=8, max=16)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(min=8, max=16)], render_kw={"placeholder": "Password"})
+    birthdate = DateField('Birthdate', format='%Y-%m-%d', validators=[InputRequired()], render_kw={"placeholder": "YYYY-MM-DD"})
+    name = StringField(validators=[InputRequired(), Length(min=2 , max=20)], render_kw={"placeholder":"Name"})
+    role = StringField(validators=[InputRequired(),Length(min=4 , max=10)],render_kw={"placeholder":"Role"})
+    add_submit = SubmitField('Add User')
+    delete_submit = SubmitField('Delete User')
 
 #route to home page
 @app.route("/")
@@ -101,7 +108,53 @@ def register():
 #route to admin dash
 @app.route("/admin", methods=['GET', 'POST'])
 def AdminDash():
+    user_form = ManagerUsers()
+    book_form = BookForm()
+
+    if user_form.validate_on_submit():
+        username = user_form.username.data
+        name = user_form.name.data
+        hashed_pass = bcrypt.generate_password_hash(user_form.password.data).decode('utf-8')
+        birthdate = user_form.birthdate.data
+        birthdate_datetime = datetime.datetime.combine(birthdate, datetime.datetime.min.time())
+        role = user_form.role.data
+        if user_form.add_submit.data:
+            existingUser = mongo.db.users.find_one({"username":username})
+            if existingUser:
+                flash("this user already eixsts","danger")
+            else:
+                mongo.db.users.insert_one({"username":username, "name":name, "password":hashed_pass,"birtdate":birthdate_datetime,"role":role})
+        else:
+            existingUser = mongo.db.users.find_one({"username":username})
+            if not existingUser:
+                flash("this user doesnt exist already",'danger')
+            else:
+                mongo.db.users.delete_one({"username":username})
+                flash("this user has been deleted","danger")
+
+    if book_form.validate_on_submit():
+        nameBook = book_form.nameBook.data
+        #ida hbina nzido a book (add book):
+        if book_form.add_submit.data:
+            #check if already exists
+            existingBook = mongo.db.books.find_one({"nameBook": nameBook})
+            if existingBook:
+                flash("This book already exists in your library!!", "danger")
+            else:
+                #sinon ida mkcho already , nzidoh:
+                mongo.db.books.insert_one({"nameBook": nameBook})
+                flash("The book has been added to the database!", 'success')
+        #ida user heb yssuprimi ktab:
+        elif book_form.delete_submit.data:
+            result = mongo.db.books.delete_one({"nameBook": nameBook})
+            if result.deleted_count > 0:
+                flash("The book has been deleted", "success")
+            else:
+                #book not found flash
+                flash("Book not found", "danger")
+
     return render_template("admin.html")
+
 
 #site dashboard , not used yet
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -122,33 +175,6 @@ def dashboard():
 
     return render_template("dashboard.html", name=name, birthdate=birthdate)
 
-
-#here you can manage the books (add and delete)
-@app.route("/manage_books", methods=['GET', 'POST'])
-def manage_books():
-    form = BookForm()
-    if form.validate_on_submit():
-        nameBook = form.nameBook.data
-        #ida hbina nzido a book (add book):
-        if form.add_submit.data:
-            #check if already exists
-            existingBook = mongo.db.books.find_one({"nameBook": nameBook})
-            if existingBook:
-                flash("This book already exists in your library!!", "danger")
-            else:
-                #sinon ida mkcho already , nzidoh:
-                mongo.db.books.insert_one({"nameBook": nameBook})
-                flash("The book has been added to the database!", 'success')
-        #ida user heb yssuprimi ktab:
-        elif form.delete_submit.data:
-            result = mongo.db.books.delete_one({"nameBook": nameBook})
-            if result.deleted_count > 0:
-                flash("The book has been deleted", "success")
-            else:
-                #book not found flash
-                flash("Book not found", "danger")
-        return redirect(url_for('manage_books'))
-    return render_template("manage_books.html", form=form)
 
 #run
 if __name__ == '__main__':
