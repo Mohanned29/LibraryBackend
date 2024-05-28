@@ -13,14 +13,16 @@
             display: flex;
         }
         .sidebar {
-            background-color: #007bff;
-            color: white;
+            background-color: #ffffff;
+            color: #007bff;
             width: 250px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box; /* Ensures padding is included in the width */
         }
         .sidebar-header {
             margin-bottom: 20px;
@@ -31,17 +33,19 @@
             width: 100%;
         }
         .sidebar-menu a {
-            color: white;
+            color: #007bff;
             text-decoration: none;
             padding: 15px;
             text-align: center;
             display: block;
-            width: 100%;
-            transition: background-color 0.3s ease;
+            width: 100%; /* Ensures the hover effect covers the full width */
+            box-sizing: border-box; /* Ensures padding is included in the width */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .sidebar-menu a:hover,
         .sidebar-menu a.active {
-            background-color: #0056b3;
+            background-color: #e9ecef;
+            color: #0056b3;
         }
         .main-content {
             flex-grow: 1;
@@ -51,7 +55,7 @@
         }
         header {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             margin-bottom: 20px;
         }
         header input {
